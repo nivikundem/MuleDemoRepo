@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><Graph author="SK" created="Tue Oct 07 10:41:02 BST 2014" guiVersion="3.4.0.P" id="1412696447531" licenseCode="Unlicensed" licenseType="Unknown" modified="Tue Oct 07 10:41:02 BST 2014" modifiedBy="SK" name="new_mapping_1_grf" revision="1.0" showComponentDetails="false">
+<Global>
+<Metadata __referenceCounter="1" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _type="Input" id="93e1c8d7-75ed-4e7e-88a5-79e51770c6bd">
+<Record fieldDelimiter="," name="a" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field containerType="SINGLE" label="field_0" name="field_0" size="10" type="string"/>
+<Field containerType="SINGLE" eofAsDelimiter="true" label="field_1" name="field_1" size="10" type="string"/>
+<Field __artificialType="_id" auto_filling="global_row_count" name="__id" type="long"/>
+</Record>
+</Metadata>
+<Metadata __index="0" __referenceCounter="1" __sourcePath="{}/Name" _dataStructure="OBJECT" _id="__id" _type="Output" id="fa19e12b-a824-41af-9387-4adfe7e045b9">
+<Record fieldDelimiter="|" name="Name" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __index="0" __sourcePath="{}/Name/firstName" containerType="SINGLE" label="firstName" name="firstName" type="string"/>
+<Field __index="1" __sourcePath="{}/Name/lastName" containerType="SINGLE" label="lastName" name="lastName" type="string"/>
+</Record>
+</Metadata>
+<Dictionary>
+<Entry id="DictionaryEntry0" input="true" name="inputPayload" output="false" type="object"/>
+<Entry id="DictionaryEntry1" input="false" name="outputPayload" output="true" type="object"/>
+</Dictionary>
+</Global>
+<Phase number="0">
+<Node charset="UTF-8" enabled="enabled" fileURL="dict:inputPayload" guiName="CSV READER" guiX="20" guiY="20" id="DATA_READER0" quotedStrings="true" skipRows="1" trim="true" type="DATA_READER">
+<attr name="_data_format"><![CDATA[CSV]]></attr>
+</Node>
+<Node charset="UTF-8" enabled="enabled" fileURL="dict:outputPayload" guiName="XML WRITER" guiX="900" guiY="20" id="EXT_XML_WRITER0" type="EXT_XML_WRITER" xmlSchemaURL=".\src\test\resources\Name.xsd">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<Name xmlns:clover="http://www.cloveretl.com/ns/xmlmapping" clover:inPort="0">
+  <firstName>$0.firstName</firstName>
+  <lastName>$0.lastName</lastName>
+</Name>]]></attr>
+<attr name="_data_format"><![CDATA[XML]]></attr>
+<attr name="cacheInMemory"><![CDATA[true]]></attr>
+<attr name="__rootGlobalElementName"><![CDATA[Name]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Foreach 'a' -&gt; 'Name'" guiX="460" guiY="20" id="FOREACH_A_NAME" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = (isnull(input.__id) ? null : num2str(input.__id));
+//END -> DO NOT REMOVE
+output.firstName = input.field_0;
+output.lastName = input.field_1;]]></attr>
+</Node>
+<Edge debugMode="true" fromNode="DATA_READER0:0" guiBendpoints="" id="Edge0" inPort="Port 0 (in)" metadata="93e1c8d7-75ed-4e7e-88a5-79e51770c6bd" outPort="Port 0 (output)" toNode="FOREACH_A_NAME:0"/>
+<Edge debugMode="true" fromNode="FOREACH_A_NAME:0" guiBendpoints="" id="Edge1" inPort="Port 0 (in)" metadata="fa19e12b-a824-41af-9387-4adfe7e045b9" outPort="Port 0 (out)" toNode="EXT_XML_WRITER0:0"/>
+</Phase>
+</Graph>
